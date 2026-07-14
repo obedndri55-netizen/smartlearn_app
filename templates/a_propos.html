@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>À propos — SmartLearn</title>
+<style>
+body { font-family: 'Segoe UI', sans-serif; margin: 0; background: #F7F8FC; }
+.entete {
+  background: linear-gradient(135deg, rgba(108,92,231,0.92), rgba(72,52,212,0.92)),
+              url('https://images.unsplash.com/photo-1517694712202-14dd9538aa97?auto=format&fit=crop&w=1200&q=80');
+  background-size: cover;
+  background-position: center;
+  color: white;
+  padding: 60px 25px;
+  text-align: center;
+}
+.entete h1 { font-size: 28px; margin-bottom: 10px; }
+.entete p { color: #E8E5FF; font-size: 15px; }
+.contenu { max-width: 650px; margin: 0 auto; padding: 40px 25px; }
+.bloc { background: white; border-radius: 14px; padding: 25px; margin-bottom: 20px; box-shadow: 0 2px 10px rgba(0,0,0,0.05); }
+.bloc h2 { color: #2D3436; font-size: 17px; margin-top: 0; }
+.bloc p { color: #566;  color: #4A4F55; font-size: 14px; line-height: 1.7; }
+.retour { display: inline-block; margin-top: 10px; color: #6C5CE7; text-decoration: none; font-weight: bold; font-size: 14px; }
+.grille-atouts { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 15px; margin-top: 10px; }
+.atout { text-align: center; }
+.atout .icone { font-size: 26px; }
+.atout .titre { font-weight: bold; font-size: 13px; color: #2D3436; margin-top: 6px; }
+</style>
+</head>
+<body>
+<div class="entete">
+  <h1>📘 SmartLearn</h1>
+  <p>La plateforme d'apprentissage en ligne, simple et accessible à tous</p>
+</div>
+<div class="contenu">
+  <div class="bloc">
+    <h2>Notre mission</h2>
+    <p>SmartLearn a été conçu pour rendre l'apprentissage accessible partout, même sans connexion stable. Choisis un module, avance à ton rythme, et télécharge tes cours en PDF pour les consulter hors ligne, à tout moment.</p>
+  </div>
+  <div class="bloc">
+    <h2>Comment ça marche ?</h2>
+    <p>Après ton inscription, choisis parmi nos modules (Informatique, Intelligence Artificielle, Anglais, HTML/CSS, JavaScript, Python, et bien d'autres). Chaque module est découpé en chapitres que tu débloques progressivement au fur et à mesure de ta progression.</p>
+  </div>
+  <div class="bloc">
+    <h2>Ce que propose SmartLearn</h2>
+    <div class="grille-atouts">
+      <div class="atout"><div class="icone">📚</div><div class="titre">Modules variés</div></div>
+      <div class="atout"><div class="icone">🔓</div><div class="titre">Progression pas à pas</div></div>
+      <div class="atout"><div class="icone">📥</div><div class="titre">Cours en PDF</div></div>
+      <div class="atout"><div class="icone">📊</div><div class="titre">Suivi détaillé</div></div>
+      <div class="atout"><div class="icone">🔒</div><div class="titre">Compte sécurisé</div></div>
+      <div class="atout"><div class="icone">🌍</div><div class="titre">Accessible partout</div></div>
+    </div>
+  </div>
+  <a class="retour" href="/connexion">← Retour à la connexion</a>
+</div>
+</body>
+</html>
