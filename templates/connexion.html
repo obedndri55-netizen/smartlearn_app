@@ -3,9 +3,27 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Connexion</title>
+<title>SmartLearn — Connexion</title>
 <style>
-body { font-family: 'Segoe UI', sans-serif; background: #F7F8FC; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; }
+* { box-sizing: border-box; }
+body { font-family: 'Segoe UI', sans-serif; margin: 0; min-height: 100vh; display: flex; }
+.panneau-gauche {
+  flex: 1;
+  background: linear-gradient(135deg, rgba(108,92,231,0.92), rgba(72,52,212,0.92)),
+              url('https://images.unsplash.com/photo-1518770660439-4636190af475?auto=format&fit=crop&w=1200&q=80');
+  background-size: cover;
+  background-position: center;
+  color: white;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 60px;
+}
+.logo { font-size: 26px; font-weight: bold; margin-bottom: 20px; }
+.panneau-gauche h2 { font-size: 30px; line-height: 1.3; margin-bottom: 15px; }
+.panneau-gauche p { font-size: 15px; color: #E8E5FF; line-height: 1.6; max-width: 400px; }
+.lien-apropos { color: white; text-decoration: underline; font-size: 13px; margin-top: 25px; display: inline-block; opacity: 0.9; }
+.panneau-droit { flex: 1; display: flex; justify-content: center; align-items: center; background: #F7F8FC; }
 .carte { background: white; padding: 40px; border-radius: 16px; box-shadow: 0 4px 20px rgba(0,0,0,0.08); width: 320px; }
 h1 { color: #2D3436; font-size: 24px; margin-bottom: 5px; }
 p.sous { color: #7F8C9B; margin-bottom: 25px; }
@@ -16,25 +34,32 @@ button:hover { background: #5A4BD1; }
 .lien { text-align: center; margin-top: 15px; font-size: 13px; color: #7F8C9B; }
 .lien a { color: #6C5CE7; font-weight: bold; text-decoration: none; }
 .message { color: #FF6B6B; font-size: 13px; margin-bottom: 10px; }
+@media (max-width: 800px) { .panneau-gauche { display: none; } }
 </style>
 </head>
 <body>
-<div class="carte">
-  <h1>Bienvenue 👋</h1>
-  <p class="sous">Connecte-toi pour continuer ton cours</p>
-  {% with messages = get_flashed_messages() %}
-    {% if messages %}
-      {% for m in messages %}<div class="message">{{ m }}</div>{% endfor %}
-    {% endif %}
-  {% endwith %}
-  <form method="POST">
-    <label>Adresse e-mail</label>
-    <input type="email" name="email" required>
-    <label>Mot de passe</label>
-    <input type="password" name="mdp" required>
-    <button type="submit">Se connecter</button>
-  </form>
-  <div class="lien">Pas encore de compte ? <a href="/inscription">Créer un compte</a></div>
+<div class="panneau-gauche">
+  <div class="logo">📘 SmartLearn</div>
+  <h2>Apprends à ton rythme,<br>partout, tout le temps.</h2>
+  <p>SmartLearn est ta plateforme d'apprentissage en ligne : choisis un module parmi Informatique, IA, Anglais, Programmation et bien plus, avance chapitre par chapitre, et télécharge tes cours en PDF où que tu sois.</p>
+  <a class="lien-apropos" href="/a-propos">En savoir plus sur SmartLearn →</a>
+</div>
+<div class="panneau-droit">
+  <div class="carte">
+    <h1>Bon retour 👋</h1>
+    <p class="sous">Connecte-toi pour continuer ton apprentissage</p>
+    {% with messages = get_flashed_messages() %}
+      {% if messages %}{% for m in messages %}<div class="message">{{ m }}</div>{% endfor %}{% endif %}
+    {% endwith %}
+    <form method="POST">
+      <label>Adresse e-mail</label>
+      <input type="email" name="email" required>
+      <label>Mot de passe</label>
+      <input type="password" name="mdp" required>
+      <button type="submit">Se connecter</button>
+    </form>
+    <div class="lien">Pas encore de compte ? <a href="/inscription">Créer un compte</a></div>
+  </div>
 </div>
 </body>
 </html>
