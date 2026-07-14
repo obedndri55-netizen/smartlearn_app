@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Connexion</title>
+<style>
+body { font-family: 'Segoe UI', sans-serif; background: #F7F8FC; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; }
+.carte { background: white; padding: 40px; border-radius: 16px; box-shadow: 0 4px 20px rgba(0,0,0,0.08); width: 320px; }
+h1 { color: #2D3436; font-size: 24px; margin-bottom: 5px; }
+p.sous { color: #7F8C9B; margin-bottom: 25px; }
+label { font-size: 13px; color: #7F8C9B; }
+input { width: 100%; padding: 10px; margin: 6px 0 15px 0; border: 1px solid #E0E1EC; border-radius: 8px; background: #F0F1F7; box-sizing: border-box; font-size: 15px; }
+button { width: 100%; padding: 12px; background: #6C5CE7; color: white; border: none; border-radius: 10px; font-weight: bold; font-size: 15px; cursor: pointer; }
+button:hover { background: #5A4BD1; }
+.lien { text-align: center; margin-top: 15px; font-size: 13px; color: #7F8C9B; }
+.lien a { color: #6C5CE7; font-weight: bold; text-decoration: none; }
+.message { color: #FF6B6B; font-size: 13px; margin-bottom: 10px; }
+</style>
+</head>
+<body>
+<div class="carte">
+  <h1>Bienvenue 👋</h1>
+  <p class="sous">Connecte-toi pour continuer ton cours</p>
+  {% with messages = get_flashed_messages() %}
+    {% if messages %}
+      {% for m in messages %}<div class="message">{{ m }}</div>{% endfor %}
+    {% endif %}
+  {% endwith %}
+  <form method="POST">
+    <label>Adresse e-mail</label>
+    <input type="email" name="email" required>
+    <label>Mot de passe</label>
+    <input type="password" name="mdp" required>
+    <button type="submit">Se connecter</button>
+  </form>
+  <div class="lien">Pas encore de compte ? <a href="/inscription">Créer un compte</a></div>
+</div>
+</body>
+</html>

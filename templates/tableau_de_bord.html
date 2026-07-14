@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mes chapitres</title>
+<style>
+body { font-family: 'Segoe UI', sans-serif; background: #F7F8FC; margin: 0; }
+.entete { background: #6C5CE7; color: white; padding: 25px 20px; text-align: center; }
+.entete h1 { margin: 0; font-size: 20px; }
+.entete p { margin: 5px 0 0 0; font-size: 13px; color: #E8E5FF; }
+.contenu { padding: 25px; max-width: 500px; margin: 0 auto; }
+.contenu h2 { color: #2D3436; font-size: 18px; }
+.ligne { background: white; padding: 15px; border-radius: 12px; margin-bottom: 12px; display: flex; align-items: center; box-shadow: 0 2px 8px rgba(0,0,0,0.04); }
+.icone { font-size: 20px; margin-right: 12px; }
+.infos { flex: 1; }
+.infos .num { font-size: 11px; color: #7F8C9B; font-weight: bold; }
+.infos .titre { font-size: 15px; color: #2D3436; }
+.bouton { background: #6C5CE7; color: white; padding: 8px 14px; border-radius: 8px; text-decoration: none; font-size: 13px; font-weight: bold; }
+.vide { text-align: center; color: #7F8C9B; margin-top: 40px; }
+.deco { text-align: center; margin-top: 20px; }
+.deco a { color: #FF6B6B; font-size: 13px; text-decoration: none; }
+.message { background: #E8FFF9; color: #00B894; padding: 10px; border-radius: 8px; font-size: 13px; margin-bottom: 15px; }
+</style>
+</head>
+<body>
+<div class="entete">
+  <h1>Bienvenue 👋</h1>
+  <p>{{ email }}</p>
+</div>
+<div class="contenu">
+  {% with messages = get_flashed_messages() %}
+    {% if messages %}
+      {% for m in messages %}<div class="message">{{ m }}</div>{% endfor %}
+    {% endif %}
+  {% endwith %}
+  <h2>Mes chapitres</h2>
+  {% if chapitres|length == 0 %}
+    <p class="vide">Aucun chapitre disponible pour le moment.<br>Reviens un peu plus tard 📚</p>
+  {% else %}
+    {% for ch in chapitres %}
+      <div class="ligne">
+        {% if ch.numero < chapitre_actuel %}
+          <span class="icone">✅</span>
+        {% elif ch.numero == chapitre_actuel %}
+          <span class="icone">📖</span>
+        {% else %}
+          <span class="icone">🔒</span>
+        {% endif %}
+        <div class="infos">
+          <div class="num">Chapitre {{ ch.numero }}</div>
+          <div class="titre">{{ ch.titre }}</div>
+        </div>
+        {% if ch.numero == chapitre_actuel %}
+          <a class="bouton" href="/telecharger/{{ ch.nom_fichier }}">Télécharger</a>
+        {% endif %}
+      </div>
+    {% endfor %}
+  {% endif %}
+  <div class="deco"><a href="/deconnexion">Se déconnecter</a></div>
+</div>
+</body>
+</html>
