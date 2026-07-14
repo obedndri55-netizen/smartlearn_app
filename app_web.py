@@ -12,7 +12,6 @@ supabase = create_client(SUPABASE_URL, SUPABASE_KEY)
 
 
 def client_utilisateur():
-    """Crée un client Supabase avec la session de l'utilisateur connecté (nécessaire pour le RLS)."""
     client = create_client(SUPABASE_URL, SUPABASE_KEY)
     client.auth.set_session(session["access_token"], session["refresh_token"])
     return client
@@ -27,6 +26,11 @@ def accueil():
     if utilisateur_connecte():
         return redirect(url_for("modules"))
     return redirect(url_for("connexion"))
+
+
+@app.route("/a-propos")
+def a_propos():
+    return render_template("a_propos.html")
 
 
 @app.route("/connexion", methods=["GET", "POST"])
