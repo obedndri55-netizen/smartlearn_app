@@ -6,11 +6,16 @@
 <title>Mes modules</title>
 <style>
 body { font-family: 'Segoe UI', sans-serif; background: linear-gradient(135deg, #F7F8FC 0%, #ECEEF9 60%, #E4E7FA 100%); margin: 0; min-height: 100vh; }
-.entete { background: linear-gradient(135deg, #6C5CE7 0%, #4834D4 100%); color: white; padding: 25px 20px; }
+.entete { background: linear-gradient(135deg, #6C5CE7 0%, #4834D4 100%); color: white; padding: 25px 20px; position: relative; }
 .entete-haut { display: flex; justify-content: space-between; align-items: center; max-width: 700px; margin: 0 auto; }
 .entete h1 { margin: 0; font-size: 20px; }
 .entete p { margin: 5px 0 0 0; font-size: 13px; color: #E8E5FF; }
-.nav-liens a { color: white; text-decoration: none; font-size: 13px; margin-left: 15px; opacity: 0.9; }
+.hamburger { background: rgba(255,255,255,0.15); border: none; color: white; font-size: 20px; width: 42px; height: 42px; border-radius: 10px; cursor: pointer; }
+.menu-deroulant { display: none; position: absolute; top: 70px; right: 20px; background: white; border-radius: 12px; box-shadow: 0 6px 24px rgba(0,0,0,0.15); overflow: hidden; z-index: 10; min-width: 220px; }
+.menu-deroulant.ouvert { display: block; }
+.menu-deroulant a { display: flex; align-items: center; gap: 10px; padding: 14px 18px; color: #2D3436; text-decoration: none; font-size: 14px; border-bottom: 1px solid #F0F1F7; }
+.menu-deroulant a:last-child { border-bottom: none; color: #FF6B6B; }
+.menu-deroulant a:hover { background: #F7F8FC; }
 .contenu { padding: 25px; max-width: 700px; margin: 0 auto; }
 .recherche { width: 100%; padding: 12px 16px; border-radius: 12px; border: 1px solid #E0E1EC; margin-bottom: 20px; font-size: 15px; box-sizing: border-box; background: white; box-shadow: 0 2px 8px rgba(0,0,0,0.04); }
 .grille { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 15px; }
@@ -32,10 +37,14 @@ body { font-family: 'Segoe UI', sans-serif; background: linear-gradient(135deg, 
       <h1>Mes modules 🎓</h1>
       <p>{{ email }}</p>
     </div>
-    <div class="nav-liens">
-      <a href="/profil">👤 Profil</a>
-      <a href="/deconnexion">🚪 Quitter</a>
-    </div>
+    <button class="hamburger" onclick="document.getElementById('menu').classList.toggle('ouvert')">☰</button>
+  </div>
+  <div class="menu-deroulant" id="menu">
+    <a href="/modules">🏠 Mes modules</a>
+    <a href="/ma-progression">📊 Ma progression</a>
+    <a href="/profil">👤 Mon profil</a>
+    <a href="/a-propos">ℹ️ À propos</a>
+    <a href="/deconnexion">🚪 Déconnexion</a>
   </div>
 </div>
 <div class="contenu">
