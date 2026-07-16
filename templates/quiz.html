@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Quiz — {{ chapitre.titre }}</title>
+<style>
+body { font-family: 'Segoe UI', sans-serif; background: linear-gradient(135deg, #F7F8FC 0%, #ECEEF9 100%); margin: 0; min-height: 100vh; }
+.entete { background: linear-gradient(135deg, #6C5CE7 0%, #4834D4 100%); color: white; padding: 25px 20px; }
+.entete h1 { margin: 0; font-size: 18px; }
+.entete p { margin: 5px 0 0 0; font-size: 13px; color: #E8E5FF; }
+.contenu { padding: 20px; max-width: 550px; margin: 0 auto; }
+.carte-question { background: white; border-radius: 12px; padding: 18px; margin-bottom: 14px; box-shadow: 0 2px 8px rgba(0,0,0,0.05); }
+.numero-q { font-size: 12px; color: #6C5CE7; font-weight: bold; margin-bottom: 6px; }
+.texte-q { font-size: 15px; color: #2D3436; margin-bottom: 12px; }
+.option { display: block; padding: 10px 12px; margin-bottom: 8px; border-radius: 8px; background: #F7F8FC; cursor: pointer; font-size: 14px; }
+.option input { margin-right: 8px; }
+button.valider { width: 100%; padding: 14px; background: #6C5CE7; color: white; border: none; border-radius: 10px; font-weight: bold; font-size: 15px; cursor: pointer; margin-top: 10px; }
+</style>
+</head>
+<body>
+<div class="entete">
+  <h1>📝 Quiz — {{ chapitre.titre }}</h1>
+  <p>Réponds aux 10 questions (50% minimum pour débloquer la suite)</p>
+</div>
+<div class="contenu">
+  <form method="POST">
+    {% for q in questions %}
+      <div class="carte-question">
+        <div class="numero-q">Question {{ q.numero_question }}</div>
+        <div class="texte-q">{{ q.question }}</div>
+        <label class="option"><input type="radio" name="question_{{ q.id }}" value="a" required> {{ q.option_a }}</label>
+        <label class="option"><input type="radio" name="question_{{ q.id }}" value="b"> {{ q.option_b }}</label>
+        <label class="option"><input type="radio" name="question_{{ q.id }}" value="c"> {{ q.option_c }}</label>
+        <label class="option"><input type="radio" name="question_{{ q.id }}" value="d"> {{ q.option_d }}</label>
+      </div>
+    {% endfor %}
+    <button class="valider" type="submit">Valider mes réponses</button>
+  </form>
+</div>
+</body>
+</html>
