@@ -79,22 +79,12 @@ def deconnexion():
     return redirect(url_for("connexion"))
 
 
-@app.route("/modules")
-def modules():
-    if not utilisateur_connecte():
-        return redirect(url_for("connexion"))
-
-    client = client_utilisateur()
-    recherche = request.args.get("q", "").strip().lower()
-
+def calculer_modules_avec_progression(client):
     resultat_modules = client.table("modules").select("*").order("ordre").execute()
     tous_modules = resultat_modules.data
 
     liste_finale = []
     for m in tous_modules:
-        if recherche and recherche not in m["nom"].lower():
-            continue
-
         resultat_chapitres = client.table("chapitres").select("numero").eq("module_id", m["id"]).execute()
         total_chapitres = len(resultat_chapitres.data)
 
@@ -106,11 +96,49 @@ def modules():
         pourcentage = min(100, round((chapitre_actuel - 1) / total_chapitres * 100)) if total_chapitres > 0 else 0
 
         m["total_chapitres"] = total_chapitres
+        m["chapitre_actuel"] = chapitre_actuel
         m["pourcentage"] = pourcentage
         liste_finale.append(m)
 
+    return liste_finale
+
+
+@app.route("/modules")
+def modules():
+    if not utilisateur_connecte():
+        return redirect(url_for("connexion"))
+
+    client = client_utilisateur()
+    recherche = request.args.get("q", "").strip().lower()
+
+    liste_finale = calculer_modules_avec_progression(client)
+    if recherche:
+        liste_finale = [m for m in liste_finale if recherche in m["nom"].lower()]
+
     return render_template("modules.html", email=session["utilisateur_email"],
                             modules=liste_finale, recherche=recherche)
+
+
+@app.route("/ma-progression")
+def ma_progression():
+    if not utilisateur_connecte():
+        return redirect(url_for("connexion"))
+
+    client = client_utilisateur()
+    liste_finale = calculer_modules_avec_progression(client)
+
+    modules_commences = [m for m in liste_finale if m["chapitre_actuel"] > 1 or m["pourcentage"] > 0]
+    modules_termines = [m for m in liste_finale if m["pourcentage"] >= 100]
+
+    if liste_finale:
+        moyenne_generale = round(sum(m["pourcentage"] for m in liste_finale) / len(liste_finale))
+    else:
+        moyenne_generale = 0
+
+    return render_template("ma_progression.html", email=session["utilisateur_email"],
+                            modules=liste_finale, moyenne_generale=moyenne_generale,
+                            nb_commences=len(modules_commences), nb_termines=len(modules_termines),
+                            nb_total=len(liste_finale))
 
 
 @app.route("/module/<int:module_id>")
