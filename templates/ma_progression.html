@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ma progression</title>
+<style>
+body { font-family: 'Segoe UI', sans-serif; background: linear-gradient(135deg, #F7F8FC 0%, #ECEEF9 100%); margin: 0; min-height: 100vh; }
+.entete { background: linear-gradient(135deg, #6C5CE7 0%, #4834D4 100%); color: white; padding: 25px 20px; position: relative; }
+.entete-haut { display: flex; justify-content: space-between; align-items: center; }
+.retour { color: #E8E5FF; text-decoration: none; font-size: 13px; }
+.entete h1 { margin: 8px 0 0 0; font-size: 20px; }
+.hamburger { background: rgba(255,255,255,0.15); border: none; color: white; font-size: 20px; width: 42px; height: 42px; border-radius: 10px; cursor: pointer; }
+.menu-deroulant { display: none; position: absolute; top: 70px; right: 20px; background: white; border-radius: 12px; box-shadow: 0 6px 24px rgba(0,0,0,0.15); overflow: hidden; z-index: 10; min-width: 220px; }
+.menu-deroulant.ouvert { display: block; }
+.menu-deroulant a { display: flex; align-items: center; gap: 10px; padding: 14px 18px; color: #2D3436; text-decoration: none; font-size: 14px; border-bottom: 1px solid #F0F1F7; }
+.menu-deroulant a:last-child { border-bottom: none; color: #FF6B6B; }
+.menu-deroulant a:hover { background: #F7F8FC; }
+.contenu { padding: 25px; max-width: 600px; margin: 0 auto; }
+.cartes-stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-bottom: 25px; }
+.carte-stat { background: white; border-radius: 12px; padding: 16px 10px; text-align: center; box-shadow: 0 2px 8px rgba(0,0,0,0.05); }
+.carte-stat .valeur { font-size: 24px; font-weight: bold; color: #6C5CE7; }
+.carte-stat .label { font-size: 11px; color: #7F8C9B; margin-top: 4px; }
+.ligne-module { background: white; border-radius: 12px; padding: 15px; margin-bottom: 10px; box-shadow: 0 2px 8px rgba(0,0,0,0.05); }
+.ligne-haut { display: flex; justify-content: space-between; font-size: 14px; margin-bottom: 8px; }
+.nom-mod { font-weight: bold; color: #2D3436; }
+.pct { color: #6C5CE7; font-weight: bold; font-size: 13px; }
+.barre-progression { background: #F0F1F7; border-radius: 20px; height: 8px; overflow: hidden; }
+.barre-remplie { background: linear-gradient(90deg, #6C5CE7, #00D9C0); height: 100%; }
+</style>
+</head>
+<body>
+<div class="entete">
+  <div class="entete-haut">
+    <div>
+      <a class="retour" href="/modules">← Tous les modules</a>
+      <h1>📊 Ma progression</h1>
+    </div>
+    <button class="hamburger" onclick="document.getElementById('menu').classList.toggle('ouvert')">☰</button>
+  </div>
+  <div class="menu-deroulant" id="menu">
+    <a href="/modules">🏠 Mes modules</a>
+    <a href="/ma-progression">📊 Ma progression</a>
+    <a href="/profil">👤 Mon profil</a>
+    <a href="/a-propos">ℹ️ À propos</a>
+    <a href="/deconnexion">🚪 Déconnexion</a>
+  </div>
+</div>
+<div class="contenu">
+  <div class="cartes-stats">
+    <div class="carte-stat">
+      <div class="valeur">{{ moyenne_generale }}%</div>
+      <div class="label">Progression globale</div>
+    </div>
+    <div class="carte-stat">
+      <div class="valeur">{{ nb_commences }}/{{ nb_total }}</div>
+      <div class="label">Modules commencés</div>
+    </div>
+    <div class="carte-stat">
+      <div class="valeur">{{ nb_termines }}</div>
+      <div class="label">Modules terminés</div>
+    </div>
+  </div>
+  {% for m in modules %}
+    <div class="ligne-module">
+      <div class="ligne-haut">
+        <span class="nom-mod">{{ m.icone }} {{ m.nom }}</span>
+        <span class="pct">{{ m.pourcentage }}%</span>
+      </div>
+      <div class="barre-progression">
+        <div class="barre-remplie" style="width: {{ m.pourcentage }}%;"></div>
+      </div>
+    </div>
+  {% endfor %}
+</div>
+</body>
+</html>
