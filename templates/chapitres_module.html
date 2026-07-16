@@ -6,9 +6,16 @@
 <title>{{ module.nom }}</title>
 <style>
 body { font-family: 'Segoe UI', sans-serif; background: linear-gradient(135deg, #F7F8FC 0%, #ECEEF9 100%); margin: 0; min-height: 100vh; }
-.entete { background: linear-gradient(135deg, #6C5CE7 0%, #4834D4 100%); color: white; padding: 25px 20px; }
+.entete { background: linear-gradient(135deg, #6C5CE7 0%, #4834D4 100%); color: white; padding: 25px 20px; position: relative; }
+.entete-haut { display: flex; justify-content: space-between; align-items: center; }
 .retour { color: #E8E5FF; text-decoration: none; font-size: 13px; }
 .entete h1 { margin: 8px 0 0 0; font-size: 20px; }
+.hamburger { background: rgba(255,255,255,0.15); border: none; color: white; font-size: 20px; width: 42px; height: 42px; border-radius: 10px; cursor: pointer; }
+.menu-deroulant { display: none; position: absolute; top: 70px; right: 20px; background: white; border-radius: 12px; box-shadow: 0 6px 24px rgba(0,0,0,0.15); overflow: hidden; z-index: 10; min-width: 220px; }
+.menu-deroulant.ouvert { display: block; }
+.menu-deroulant a { display: flex; align-items: center; gap: 10px; padding: 14px 18px; color: #2D3436; text-decoration: none; font-size: 14px; border-bottom: 1px solid #F0F1F7; }
+.menu-deroulant a:last-child { border-bottom: none; color: #FF6B6B; }
+.menu-deroulant a:hover { background: #F7F8FC; }
 .contenu { padding: 25px; max-width: 500px; margin: 0 auto; }
 .ligne { background: white; padding: 15px; border-radius: 12px; margin-bottom: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.05); }
 .ligne-haut { display: flex; align-items: center; }
@@ -25,8 +32,20 @@ body { font-family: 'Segoe UI', sans-serif; background: linear-gradient(135deg, 
 </head>
 <body>
 <div class="entete">
-  <a class="retour" href="/modules">← Tous les modules</a>
-  <h1>{{ module.icone }} {{ module.nom }}</h1>
+  <div class="entete-haut">
+    <div>
+      <a class="retour" href="/modules">← Tous les modules</a>
+      <h1>{{ module.icone }} {{ module.nom }}</h1>
+    </div>
+    <button class="hamburger" onclick="document.getElementById('menu').classList.toggle('ouvert')">☰</button>
+  </div>
+  <div class="menu-deroulant" id="menu">
+    <a href="/modules">🏠 Mes modules</a>
+    <a href="/ma-progression">📊 Ma progression</a>
+    <a href="/profil">👤 Mon profil</a>
+    <a href="/a-propos">ℹ️ À propos</a>
+    <a href="/deconnexion">🚪 Déconnexion</a>
+  </div>
 </div>
 <div class="contenu">
   {% with messages = get_flashed_messages() %}
