@@ -101,15 +101,9 @@ def modules():
         resultat_prog = client.table("progression_module").select("chapitre_actuel") \
             .eq("utilisateur_id", session["utilisateur_id"]).eq("module_id", m["id"]).execute()
 
-        if resultat_prog.data:
-            chapitre_actuel = resultat_prog.data[0]["chapitre_actuel"]
-        else:
-            chapitre_actuel = 1
+        chapitre_actuel = resultat_prog.data[0]["chapitre_actuel"] if resultat_prog.data else 1
 
-        if total_chapitres > 0:
-            pourcentage = min(100, round((chapitre_actuel - 1) / total_chapitres * 100))
-        else:
-            pourcentage = 0
+        pourcentage = min(100, round((chapitre_actuel - 1) / total_chapitres * 100)) if total_chapitres > 0 else 0
 
         m["total_chapitres"] = total_chapitres
         m["pourcentage"] = pourcentage
@@ -165,15 +159,50 @@ def telecharger(nom_fichier):
         return redirect(url_for("modules"))
 
 
-@app.route("/chapitre-suivant/<int:module_id>/<int:numero>")
-def chapitre_suivant(module_id, numero):
+@app.route("/quiz/<int:chapitre_id>", methods=["GET", "POST"])
+def quiz(chapitre_id):
     if not utilisateur_connecte():
         return redirect(url_for("connexion"))
+
     client = client_utilisateur()
-    client.table("progression_module").update(
-        {"chapitre_actuel": numero + 1}
-    ).eq("utilisateur_id", session["utilisateur_id"]).eq("module_id", module_id).execute()
-    return redirect(url_for("module_detail", module_id=module_id))
+
+    resultat_chapitre = client.table("chapitres").select("*").eq("id", chapitre_id).execute()
+    if not resultat_chapitre.data:
+        flash("Chapitre introuvable.")
+        return redirect(url_for("modules"))
+    chapitre = resultat_chapitre.data[0]
+
+    resultat_questions = client.table("quiz_questions").select("*") \
+        .eq("chapitre_id", chapitre_id).order("numero_question").execute()
+    questions = resultat_questions.data
+
+    if not questions:
+        flash("Aucun quiz disponible pour ce chapitre pour le moment.")
+        return redirect(url_for("module_detail", module_id=chapitre["module_id"]))
+
+    if request.method == "POST":
+        bonnes_reponses = 0
+        total = len(questions)
+        for q in questions:
+            reponse_utilisateur = request.form.get(f"question_{q['id']}")
+            if reponse_utilisateur == q["bonne_reponse"]:
+                bonnes_reponses += 1
+
+        pourcentage = round((bonnes_reponses / total) * 100)
+
+        if pourcentage >= 50:
+            client.table("progression_module").update(
+                {"chapitre_actuel": chapitre["numero"] + 1}
+            ).eq("utilisateur_id", session["utilisateur_id"]).eq("module_id", chapitre["module_id"]).execute()
+            flash(f"🎉 Bravo ! Tu as obtenu {bonnes_reponses}/{total} ({pourcentage}%). Chapitre suivant débloqué !")
+        else:
+            flash(f"Malheureusement, vous devriez reprendre le quiz et tentez d'avoir au minimum 50% "
+                  f"(c'est-à-dire 5 bonnes réponses sur 10) pour débloquer le chapitre suivant. "
+                  f"Votre score : {bonnes_reponses}/{total} ({pourcentage}%).")
+
+        return redirect(url_for("module_detail", module_id=chapitre["module_id"]))
+
+    return render_template("quiz.html", chapitre=chapitre, questions=questions)
 
 
 @app.route("/profil", methods=["GET", "POST"])
