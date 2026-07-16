@@ -10,12 +10,15 @@ body { font-family: 'Segoe UI', sans-serif; background: linear-gradient(135deg, 
 .retour { color: #E8E5FF; text-decoration: none; font-size: 13px; }
 .entete h1 { margin: 8px 0 0 0; font-size: 20px; }
 .contenu { padding: 25px; max-width: 500px; margin: 0 auto; }
-.ligne { background: white; padding: 15px; border-radius: 12px; margin-bottom: 12px; display: flex; align-items: center; box-shadow: 0 2px 8px rgba(0,0,0,0.05); }
+.ligne { background: white; padding: 15px; border-radius: 12px; margin-bottom: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.05); }
+.ligne-haut { display: flex; align-items: center; }
 .icone { font-size: 20px; margin-right: 12px; }
 .infos { flex: 1; }
 .infos .num { font-size: 11px; color: #7F8C9B; font-weight: bold; }
 .infos .titre { font-size: 15px; color: #2D3436; }
-.bouton { background: #6C5CE7; color: white; padding: 8px 14px; border-radius: 8px; text-decoration: none; font-size: 13px; font-weight: bold; }
+.actions { display: flex; gap: 8px; margin-top: 12px; }
+.bouton { background: #6C5CE7; color: white; padding: 8px 14px; border-radius: 8px; text-decoration: none; font-size: 13px; font-weight: bold; flex: 1; text-align: center; }
+.bouton-quiz { background: #00D9C0; }
 .vide { text-align: center; color: #7F8C9B; margin-top: 40px; }
 .message { background: #E8FFF9; color: #00B894; padding: 10px; border-radius: 8px; font-size: 13px; margin-bottom: 15px; }
 </style>
@@ -34,15 +37,20 @@ body { font-family: 'Segoe UI', sans-serif; background: linear-gradient(135deg, 
   {% else %}
     {% for ch in chapitres %}
       <div class="ligne">
-        {% if ch.numero < chapitre_actuel %}<span class="icone">✅</span>
-        {% elif ch.numero == chapitre_actuel %}<span class="icone">📖</span>
-        {% else %}<span class="icone">🔒</span>{% endif %}
-        <div class="infos">
-          <div class="num">Chapitre {{ ch.numero }}</div>
-          <div class="titre">{{ ch.titre }}</div>
+        <div class="ligne-haut">
+          {% if ch.numero < chapitre_actuel %}<span class="icone">✅</span>
+          {% elif ch.numero == chapitre_actuel %}<span class="icone">📖</span>
+          {% else %}<span class="icone">🔒</span>{% endif %}
+          <div class="infos">
+            <div class="num">Chapitre {{ ch.numero }}</div>
+            <div class="titre">{{ ch.titre }}</div>
+          </div>
         </div>
         {% if ch.numero == chapitre_actuel %}
-          <a class="bouton" href="/telecharger/{{ ch.nom_fichier }}">Télécharger</a>
+        <div class="actions">
+          <a class="bouton" href="/telecharger/{{ ch.nom_fichier }}">📥 Télécharger</a>
+          <a class="bouton bouton-quiz" href="/quiz/{{ ch.id }}">📝 Faire le quiz</a>
+        </div>
         {% endif %}
       </div>
     {% endfor %}
