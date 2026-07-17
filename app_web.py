@@ -30,7 +30,7 @@ def accueil():
 
 @app.route("/a-propos")
 def a_propos():
-    return render_template("a_propos.html")
+    return render_template("a_propos.html", connecte=utilisateur_connecte())
 
 
 @app.route("/connexion", methods=["GET", "POST"])
