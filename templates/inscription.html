@@ -52,6 +52,8 @@ button:hover { background: #00BFA8; }
       {% if messages %}{% for m in messages %}<div class="message">{{ m }}</div>{% endfor %}{% endif %}
     {% endwith %}
     <form method="POST">
+      <label>Nom d'utilisateur</label>
+      <input type="text" name="nom" required>
       <label>Adresse e-mail</label>
       <input type="email" name="email" required>
       <label>Mot de passe (6 caractères minimum)</label>
