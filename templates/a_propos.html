@@ -53,7 +53,11 @@ body { font-family: 'Segoe UI', sans-serif; margin: 0; background: #F7F8FC; }
       <div class="atout"><div class="icone">🌍</div><div class="titre">Accessible partout</div></div>
     </div>
   </div>
+  {% if connecte %}
+  <a class="retour" href="/modules">← Retour à mes modules</a>
+{% else %}
   <a class="retour" href="/connexion">← Retour à la connexion</a>
+{% endif %}
 </div>
 </body>
 </html>
