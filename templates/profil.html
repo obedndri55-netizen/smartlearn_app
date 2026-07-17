@@ -5,10 +5,11 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Mon profil</title>
 <style>
-body { font-family: 'Segoe UI', sans-serif; background: linear-gradient(135deg, #F7F8FC 0%, #ECEEF9 100%); display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; }
-.carte { background: white; padding: 40px; border-radius: 16px; box-shadow: 0 4px 20px rgba(0,0,0,0.08); width: 320px; }
-h1 { color: #2D3436; font-size: 22px; margin-bottom: 5px; }
-.email { color: #7F8C9B; margin-bottom: 25px; font-size: 13px; }
+body { font-family: 'Segoe UI', sans-serif; background: linear-gradient(135deg, #F7F8FC 0%, #ECEEF9 100%); display: flex; justify-content: center; align-items: center; min-height: 100vh; margin: 0; padding: 20px; box-sizing: border-box; }
+.carte { background: white; padding: 40px; border-radius: 16px; box-shadow: 0 4px 20px rgba(0,0,0,0.08); width: 320px; max-width: 100%; box-sizing: border-box; }
+.avatar-grand { width: 60px; height: 60px; border-radius: 50%; background: #6C5CE7; color: white; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 24px; margin: 0 auto 15px auto; }
+h1 { color: #2D3436; font-size: 22px; margin-bottom: 5px; text-align: center; }
+.email { color: #7F8C9B; margin-bottom: 25px; font-size: 13px; text-align: center; }
 label { font-size: 13px; color: #7F8C9B; }
 input { width: 100%; padding: 10px; margin: 6px 0 15px 0; border: 1px solid #E0E1EC; border-radius: 8px; background: #F0F1F7; box-sizing: border-box; font-size: 15px; }
 button { width: 100%; padding: 12px; background: #6C5CE7; color: white; border: none; border-radius: 10px; font-weight: bold; font-size: 15px; cursor: pointer; }
@@ -19,7 +20,8 @@ button { width: 100%; padding: 12px; background: #6C5CE7; color: white; border: 
 </head>
 <body>
 <div class="carte">
-  <h1>Mon profil 👤</h1>
+  <div class="avatar-grand">{{ nom[0]|upper }}</div>
+  <h1>{{ nom }}</h1>
   <p class="email">{{ email }}</p>
   {% with messages = get_flashed_messages() %}
     {% if messages %}{% for m in messages %}<div class="message">{{ m }}</div>{% endfor %}{% endif %}
