@@ -23,6 +23,7 @@ body { font-family: 'Segoe UI', sans-serif; background: linear-gradient(135deg, 
 .barre-remplie { background: linear-gradient(90deg, #6C5CE7, #00D9C0); height: 100%; }
 .pourcentage { font-size: 11px; color: #7F8C9B; margin-top: 6px; }
 .message { background: #E8FFF9; color: #00B894; padding: 10px; border-radius: 8px; font-size: 13px; margin-bottom: 15px; }
+.vide-recherche { text-align: center; color: #7F8C9B; margin-top: 30px; display: none; }
 .nav-bas { position: fixed; bottom: 0; left: 0; right: 0; background: white; display: flex; justify-content: space-around; padding: 10px 0 8px 0; box-shadow: 0 -2px 12px rgba(0,0,0,0.08); }
 .nav-item { display: flex; flex-direction: column; align-items: center; text-decoration: none; color: #7F8C9B; font-size: 11px; gap: 3px; }
 .nav-item.actif { color: #6C5CE7; font-weight: bold; }
@@ -43,12 +44,10 @@ body { font-family: 'Segoe UI', sans-serif; background: linear-gradient(135deg, 
   {% with messages = get_flashed_messages() %}
     {% if messages %}{% for m in messages %}<div class="message">{{ m }}</div>{% endfor %}{% endif %}
   {% endwith %}
-  <form method="GET" action="/modules">
-    <input class="recherche" type="text" name="q" placeholder="🔍 Rechercher un module..." value="{{ recherche }}">
-  </form>
-  <div class="grille">
+  <input class="recherche" type="text" id="champRecherche" placeholder="🔍 Rechercher un module..." onkeyup="filtrerModules()">
+  <div class="grille" id="grilleModules">
     {% for m in modules %}
-      <a class="carte-module" href="/module/{{ m.id }}">
+      <a class="carte-module" href="/module/{{ m.id }}" data-nom="{{ m.nom|lower }}">
         <div class="icone-module">{{ m.icone }}</div>
         <div class="nom-module">{{ m.nom }}</div>
         <div class="desc-module">{{ m.description }}</div>
@@ -59,6 +58,7 @@ body { font-family: 'Segoe UI', sans-serif; background: linear-gradient(135deg, 
       </a>
     {% endfor %}
   </div>
+  <p class="vide-recherche" id="messageVide">Aucun module ne correspond à ta recherche.</p>
 </div>
 <div class="nav-bas">
   <a class="nav-item actif" href="/modules"><span class="icone-nav">🏠</span>Accueil</a>
@@ -66,5 +66,40 @@ body { font-family: 'Segoe UI', sans-serif; background: linear-gradient(135deg, 
   <a class="nav-item" href="/ma-progression"><span class="icone-nav">📊</span>Progrès</a>
   <a class="nav-item" href="/a-propos"><span class="icone-nav">ℹ️</span>À propos</a>
 </div>
+<script>
+function filtrerModules() {
+  const texte = document.getElementById('champRecherche').value.toLowerCase().trim();
+  const cartes = Array.from(document.querySelectorAll('#grilleModules .carte-module'));
+  let resultatsVisibles = 0;
+
+  const commencePar = [];
+  const contient = [];
+
+  cartes.forEach(carte => {
+    const nom = carte.getAttribute('data-nom');
+    if (texte === "") {
+      carte.style.display = "";
+      resultatsVisibles++;
+    } else if (nom.startsWith(texte)) {
+      commencePar.push(carte);
+    } else if (nom.includes(texte)) {
+      contient.push(carte);
+    } else {
+      carte.style.display = "none";
+    }
+  });
+
+  if (texte !== "") {
+    const grille = document.getElementById('grilleModules');
+    [...commencePar, ...contient].forEach(carte => {
+      carte.style.display = "";
+      grille.appendChild(carte);
+      resultatsVisibles++;
+    });
+  }
+
+  document.getElementById('messageVide').style.display = resultatsVisibles === 0 ? "block" : "none";
+}
+</script>
 </body>
 </html>
