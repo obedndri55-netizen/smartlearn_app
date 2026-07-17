@@ -34,7 +34,16 @@ button:hover { background: #00BFA8; }
 .lien { text-align: center; margin-top: 15px; font-size: 13px; }
 .lien a { color: #6C5CE7; font-weight: bold; text-decoration: none; }
 .message { color: #FF6B6B; font-size: 13px; margin-bottom: 10px; }
-@media (max-width: 800px) { .panneau-gauche { display: none; } }
+
+@media (max-width: 800px) {
+  body { flex-direction: column; }
+  .panneau-gauche { flex: none; padding: 25px 20px; text-align: center; align-items: center; }
+  .logo { font-size: 20px; margin-bottom: 10px; }
+  .panneau-gauche h2 { font-size: 20px; margin-bottom: 8px; }
+  .panneau-gauche p { font-size: 13px; max-width: 100%; }
+  .lien-apropos { margin-top: 12px; font-size: 12px; }
+  .panneau-droit { flex: none; padding: 30px 15px; }
+}
 </style>
 </head>
 <body>
