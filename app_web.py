@@ -42,6 +42,8 @@ def connexion():
             reponse = supabase.auth.sign_in_with_password({"email": email, "password": mdp})
             session["utilisateur_id"] = reponse.user.id
             session["utilisateur_email"] = reponse.user.email
+            metadata = reponse.user.user_metadata or {}
+            session["utilisateur_nom"] = metadata.get("nom", reponse.user.email)
             session["access_token"] = reponse.session.access_token
             session["refresh_token"] = reponse.session.refresh_token
             return redirect(url_for("modules"))
@@ -58,13 +60,23 @@ def connexion():
 @app.route("/inscription", methods=["GET", "POST"])
 def inscription():
     if request.method == "POST":
+        nom = request.form.get("nom", "").strip()
         email = request.form.get("email", "").strip()
         mdp = request.form.get("mdp", "").strip()
+
+        if not nom:
+            flash("Merci d'indiquer ton nom d'utilisateur.")
+            return redirect(url_for("inscription"))
         if len(mdp) < 6:
             flash("Le mot de passe doit faire au moins 6 caractères.")
             return redirect(url_for("inscription"))
+
         try:
-            supabase.auth.sign_up({"email": email, "password": mdp})
+            supabase.auth.sign_up({
+                "email": email,
+                "password": mdp,
+                "options": {"data": {"nom": nom}}
+            })
             flash("Un e-mail de confirmation t'a été envoyé. Clique sur le lien reçu avant de te connecter.")
             return redirect(url_for("connexion"))
         except Exception as erreur:
@@ -115,7 +127,7 @@ def modules():
     if recherche:
         liste_finale = [m for m in liste_finale if recherche in m["nom"].lower()]
 
-    return render_template("modules.html", email=session["utilisateur_email"],
+    return render_template("modules.html", nom=session.get("utilisateur_nom", session["utilisateur_email"]),
                             modules=liste_finale, recherche=recherche)
 
 
@@ -130,12 +142,9 @@ def ma_progression():
     modules_commences = [m for m in liste_finale if m["chapitre_actuel"] > 1 or m["pourcentage"] > 0]
     modules_termines = [m for m in liste_finale if m["pourcentage"] >= 100]
 
-    if liste_finale:
-        moyenne_generale = round(sum(m["pourcentage"] for m in liste_finale) / len(liste_finale))
-    else:
-        moyenne_generale = 0
+    moyenne_generale = round(sum(m["pourcentage"] for m in liste_finale) / len(liste_finale)) if liste_finale else 0
 
-    return render_template("ma_progression.html", email=session["utilisateur_email"],
+    return render_template("ma_progression.html", nom=session.get("utilisateur_nom", session["utilisateur_email"]),
                             modules=liste_finale, moyenne_generale=moyenne_generale,
                             nb_commences=len(modules_commences), nb_termines=len(modules_termines),
                             nb_total=len(liste_finale))
@@ -171,7 +180,8 @@ def module_detail(module_id):
     chapitres = resultat_chapitres.data
 
     return render_template("chapitres_module.html", module=module, chapitres=chapitres,
-                            chapitre_actuel=chapitre_actuel, email=session["utilisateur_email"])
+                            chapitre_actuel=chapitre_actuel,
+                            nom=session.get("utilisateur_nom", session["utilisateur_email"]))
 
 
 @app.route("/telecharger/<nom_fichier>")
@@ -257,7 +267,8 @@ def profil():
             flash(f"Erreur : {erreur}")
         return redirect(url_for("profil"))
 
-    return render_template("profil.html", email=session["utilisateur_email"])
+    return render_template("profil.html", email=session["utilisateur_email"],
+                            nom=session.get("utilisateur_nom", session["utilisateur_email"]))
 
 
 if __name__ == "__main__":
